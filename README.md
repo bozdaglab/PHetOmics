@@ -23,7 +23,7 @@ PHetOmics/
 │   ├── 01_c_metabolome_nodes_edges.py         # metabolite node features + similarity edges
 │   ├── 02_microbiome_taxonomy_nodes_edges.py  # microbe node features + taxonomy edges
 │   ├── metabolome_seed_helpers.py             # shared helpers for metabolite column handling
-│   ├── PHetOmics.py                           # PHetOmics heterogeneous GNN (main model)
+│   ├── PHetOmics.py                           # PHetOmics  model
 │   ├── original_han.py                        # reference HAN built on torch_geometric HANConv
 │   ├── gnn_baselines.py                       # GCN / GraphSAGE / GIN baselines
 │   ├── ml_baselines.py                        # RandomForest / SVR / MLP / XGBoost baselines
@@ -110,7 +110,7 @@ Metrics reported: R², RMSE, MAE, Pearson, Spearman, aggregated across the 20 se
 
 | Script | Models | Output folder |
 |---|---|---|
-| `PHetOmics.py` | **PHetOmics** heterogeneous GNN | `hetero_han_results_test/` |
+| `PHetOmics.py` | **PHetOmics** heterogeneous GNN | `PHetOmics_results_test/` |
 | `original_han.py` | PyG `HANConv` reference | `original_han_results/` |
 | `gnn_baselines.py` | GCN, GraphSAGE, GIN on a plant-only graph | `gnn_results_tuned/` |
 | `ml_baselines.py` | RandomForest, SVR (RBF), MLP, XGBoost | `ml_results_flexible_targets/` |
