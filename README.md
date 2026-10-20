@@ -37,7 +37,7 @@ PHetOmics/
 
 ## Data
 
-Raw inputs live in `Code_final_model/raw_dataset/`.
+Raw inputs live in `raw_dataset/`.
 
 | File | Contents | Shape |
 |---|---|---|
