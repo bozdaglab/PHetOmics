@@ -139,19 +139,7 @@ Metrics reported: R², RMSE, MAE, Pearson, Spearman, aggregated across the 20 se
 The plant → microbe / metabolite observation edges are what let the biological graph
 influence the phenotype prediction; without them plant nodes would be disconnected from the
 microbe–metabolite subgraph.
-
-### Architecture (`CustomHeteroHANRegressor`)
-
-1. **Feature gates** — a learnable per-feature gate `2·sigmoid(g)` on each node type's raw
-   input (initialised neutral at 1.0). The learned gate values are exported as a feature
-   importance table.
-2. **Input projection** — one linear layer per node type into a shared hidden size.
-3. **`HeteroHANLayer` × L** — for each edge type a multi-head `GATConv` (4 heads,
-   edge-weight aware) produces a relation-specific message; a `SemanticAttention` module per
-   destination node type then learns a softmax over incoming relations (plus a self message
-   so isolated nodes stay valid). ELU + dropout.
-4. **Output head** — linear regression on the final `plant` embeddings.
-## Model Architecture
+## PHetOmics Architecture
 <p align="center">
   <img
     src="architecture.png"
