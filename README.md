@@ -16,21 +16,21 @@ model, and the result tables from the final runs.
 
 ```
 PHetOmics/
-├── Code_final_model/
-│   ├── 00_preprocess.py                       # split + preprocess the four omics tables per seed
-│   ├── 01_a_metabolome_smiles.py              # look up SMILES for metabolites on PubChem
-│   ├── 01_b_create_final_compound_smiles.py   # merge automatic + manual SMILES, resolve CIDs
-│   ├── 01_c_metabolome_nodes_edges.py         # metabolite node features + similarity edges
-│   ├── 02_microbiome_taxonomy_nodes_edges.py  # microbe node features + taxonomy edges
-│   ├── metabolome_seed_helpers.py             # shared helpers for metabolite column handling
-│   ├── PHetOmics.py                           # PHetOmics  model
-│   ├── original_han.py                        # reference HAN built on torch_geometric HANConv
-│   ├── gnn_baselines.py                       # GCN / GraphSAGE / GIN baselines
-│   ├── ml_baselines.py                        # RandomForest / SVR / MLP / XGBoost baselines
-│   ├── raw_dataset/                           # raw input tables
-│   ├── preprocessed/                          # per-seed splits + per-seed graph files
-│   └── graph_output/                          # global metabolite / microbe graph artefacts
-└── Latest_Results/                            # exported node / edge tables for inspection
+
+   ├── 00_preprocess.py                       # split + preprocess the four omics tables per seed
+   ├── 01_a_metabolome_smiles.py              # look up SMILES for metabolites on PubChem
+   ├── 01_b_create_final_compound_smiles.py   # merge automatic + manual SMILES, resolve CIDs
+   ├── 01_c_metabolome_nodes_edges.py         # metabolite node features + similarity edges
+   ├── 02_microbiome_taxonomy_nodes_edges.py  # microbe node features + taxonomy edges
+   ├── metabolome_seed_helpers.py             # shared helpers for metabolite column handling
+   ├── PHetOmics.py                           # PHetOmics  model
+   ├── HAN.py                        # reference HAN built on torch_geometric HANConv
+   ├── gnn_baselines.py                       # GCN / GraphSAGE / GIN baselines
+   ├── ml_baselines.py                        # RandomForest / SVR / MLP / XGBoost baselines
+   ├── raw_dataset/                           # raw input tables
+   ├── preprocessed/                          # per-seed splits + per-seed graph files
+   └── graph_output/                          # global metabolite / microbe graph artefacts
+
 ```
 
 ---
@@ -111,7 +111,7 @@ Metrics reported: R², RMSE, MAE, Pearson, Spearman, aggregated across the 20 se
 | Script | Models | Output folder |
 |---|---|---|
 | `PHetOmics.py` | **PHetOmics** heterogeneous GNN | `PHetOmics_results_test/` |
-| `original_han.py` | PyG `HANConv` reference | `original_han_results/` |
+| `HAN.py` | PyG `HANConv` reference | `original_han_results/` |
 | `gnn_baselines.py` | GCN, GraphSAGE, GIN on a plant-only graph | `gnn_results_tuned/` |
 | `ml_baselines.py` | RandomForest, SVR (RBF), MLP, XGBoost | `ml_results_flexible_targets/` |
 
@@ -187,7 +187,6 @@ GPU is used automatically when available; CPU works for all scripts.
 
 ## Reproducing
 
-From `Code_final_model/`:
 
 ```bash
 python 00_preprocess.py
@@ -214,7 +213,7 @@ python PHetOmics.py
 ```
 
 Baselines run the same way with `ml_baselines.py`, `gnn_baselines.py`, and
-`original_han.py`. Step `01_a` queries PubChem over the network and is rate-limited; the
+`HAN.py`. Step `01_a` queries PubChem over the network and is rate-limited; the
 `preprocessed/` and `graph_output/` folders are already populated, so the model scripts can
 be run directly without redoing steps 00–02.
 
