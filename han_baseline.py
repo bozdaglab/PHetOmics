@@ -6,7 +6,7 @@ Uses the same heterogeneous graph as our_model.py:
   - plant, microbe, and metabolite node features
   - all edge types passed directly to HANConv via edge_index_dict
 
-Run: python HAN.py
+Run: python han_baseline.py
 """
 
 from __future__ import annotations
