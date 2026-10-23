@@ -10,6 +10,33 @@ The repository contains the full pipeline: leakage-safe preprocessing, graph con
 the PHetOmics model, classical ML and homogeneous GNN baselines, a PyG `HANConv` reference
 model, and the result tables from the final runs.
 
+<p align="center">
+  <img
+    src="architecture.png"
+    alt="PHetOmics architecture"
+    width="800"
+  >
+</p>
+Fig. 1. Proposed PHetOmics framework for plant phenotype prediction. Preprocessed genotype, metabolome, microbiome, and phenotype data are used to construct a heterogeneous graph with plant, metabolite, and microbe nodes connected by similarity, taxonomy, observation, and KEGG-derived biological edges. PHetOmics learns plant embeddings for ShootDryWeight g prediction.
+
+### Graph
+
+| Node type | Features |
+|---|---|
+| `plant` | Concatenated preprocessed genotype + metabolome + microbiome features for the plot |
+| `microbe` | Numeric taxonomy encoding |
+| `metabolite` | RDKit, Morgan, ChemBERTa and MoLFormer embeddings |
+
+| Edge type | Source |
+|---|---|
+| plant — similar_to — plant | Pearson correlation of plant features ≥ 0.70 |
+| microbe — same_taxonomy — microbe | Shared genus / species |
+| metabolite — similar_to — metabolite | Averaged chemical similarity ≥ 0.80 |
+| microbe — produces / uses — metabolite | KEGG-derived biological edges (plus reverse) |
+| plant — has_microbe — microbe | Top-50 positive microbe values per plot (plus reverse) |
+| plant — has_metabolite — metabolite | Top-50 positive metabolite values per plot (plus reverse) |
+
+
 ---
 
 ## Repository layout
@@ -116,52 +143,6 @@ Metrics reported: R², RMSE, MAE, Pearson, Spearman, aggregated across the 20 se
 | `ml_baselines.py` | RandomForest, SVR (RBF), MLP, XGBoost | `ml_results_flexible_targets/` |
 
 ---
-
-## The PHetOmics model
-
-### Graph
-
-| Node type | Features |
-|---|---|
-| `plant` | Concatenated preprocessed genotype + metabolome + microbiome features for the plot |
-| `microbe` | Numeric taxonomy encoding |
-| `metabolite` | RDKit, Morgan, ChemBERTa and MoLFormer embeddings |
-
-| Edge type | Source |
-|---|---|
-| plant — similar_to — plant | Pearson correlation of plant features ≥ 0.70 |
-| microbe — same_taxonomy — microbe | Shared genus / species |
-| metabolite — similar_to — metabolite | Averaged chemical similarity ≥ 0.80 |
-| microbe — produces / uses — metabolite | KEGG-derived biological edges (plus reverse) |
-| plant — has_microbe — microbe | Top-50 positive microbe values per plot (plus reverse) |
-| plant — has_metabolite — metabolite | Top-50 positive metabolite values per plot (plus reverse) |
-
-The plant → microbe / metabolite observation edges are what let the biological graph
-influence the phenotype prediction; without them plant nodes would be disconnected from the
-microbe–metabolite subgraph.
-## PHetOmics Architecture
-<p align="center">
-  <img
-    src="architecture.png"
-    alt="PHetOmics architecture"
-    width="800"
-  >
-</p>
-Fig. 1. Proposed PHetOmics framework for plant phenotype prediction. Preprocessed genotype, metabolome, microbiome, and phenotype data are used to construct a heterogeneous graph with plant, metabolite, and microbe nodes connected by similarity, taxonomy, observation, and KEGG-derived biological edges. PHetOmics learns plant embeddings for ShootDryWeight g prediction.
-
-### Interpretability exports
-
-For the selected config of every seed the script writes:
-
-- `selected_attention_summary.csv` — semantic attention per node type / relation / layer
-- `selected_edge_attention_top.csv` — top-500 edges per edge type by GAT attention
-- `selected_feature_gate_importance.csv` — learned feature gate values
-- `selected_gradient_feature_importance.csv` — gradient-based feature importance
-- `biological_edge_mapping_audit.csv`, `edge_count_summary.csv` — graph construction audit
-
----
-
-
 
 ## Requirements
 
